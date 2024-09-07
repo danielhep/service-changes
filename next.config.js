@@ -5,6 +5,11 @@
 await import("./src/env.js");
 
 /** @type {import("next").NextConfig} */
-const config = {};
+const config = {
+  webpack: (config) => {
+    config.externals = [...config.externals, "@mapbox/node-pre-gyp", "duckdb-async", "duckdb"];
+    return config;
+  },
+};
 
 export default config;
