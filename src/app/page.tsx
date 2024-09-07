@@ -24,8 +24,10 @@ export default async function Home({
     { routeShortName: "B2", tripCount: 40, serviceHours: 15.0 },
     { routeShortName: "C3", tripCount: 30, serviceHours: 12.5 },
   ];
-  const date = searchParams.date ?? new Date().toISOString();
-  const data = await loadTransitData(new Date(date));
+  const firstDate = searchParams.firstDate ?? new Date().toISOString();
+  const secondDate = searchParams.secondDate ?? new Date().toISOString();
+  const firstData = await loadTransitData(new Date(firstDate));
+  const secondData = await loadTransitData(new Date(secondDate));
   return (
     <HydrateClient>
       <div className="container mx-auto p-4">
@@ -38,11 +40,11 @@ export default async function Home({
           <Card>
             <CardHeader>
               <CardTitle>
-                Transit Data for {new Date(date).toDateString()}
+                Transit Data for {new Date(firstDate).toDateString()} to {new Date(secondDate).toDateString()}
               </CardTitle>
             </CardHeader>
             <CardContent>
-              <DataTable transitData={transitData} />
+              <DataTable transitData1={firstData} transitData2={secondData} />
             </CardContent>
           </Card>
         </div>

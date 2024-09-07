@@ -1,6 +1,7 @@
 "use server";
 import { Database } from "duckdb-async";
 import sql, {Sql} from "sql-template-tag";
+import { TransitData } from "./types";
 
 async function executeQuery(query:Sql, db: Database) {
   const preparedQuery = await db.prepare(query.duckdb);
@@ -15,7 +16,8 @@ export async function loadTransitData(date: Date) {
   const calendarDatesPath = `${gtfsPath}/calendar_dates.txt`;
   const tripsPath = `${gtfsPath}/trips.txt`;
   const routesPath = `${gtfsPath}/routes.txt`;
-  const serviceIds = await executeQuery(sql`
+  const stopTimesPath = `${gtfsPath}/stop_times.txt`;
+  const data = await executeQuery(sql`
     WITH regular_services AS (
         SELECT service_id,
             COLUMNS(lower(strftime(${date}, '%A'))) AS weekday
@@ -55,6 +57,16 @@ export async function loadTransitData(date: Date) {
       JOIN 
           service_ids a ON t.service_id = a.service_id
     ),
+    trips_per_route AS (
+      FROM
+        read_csv(${routesPath}, header=True) r
+      JOIN
+        active_trips tr ON r.route_id = tr.route_id
+      SELECT 
+        tr.route_id,
+        COUNT(DISTINCT tr.trip_id) AS trip_count
+      GROUP BY tr.route_id
+    ),
     trip_stop_times AS (
       SELECT 
         trip_id,
@@ -74,7 +86,7 @@ export async function loadTransitData(date: Date) {
             PARTITION BY trip_id 
             ORDER BY stop_sequence DESC
         ) AS last_stop_id
-      FROM read_csv('gtfs/stop_times.txt', types={'arrival_time': 'INTERVAL', 'departure_time': 'INTERVAL'})
+      FROM read_csv(${stopTimesPath}, types={'arrival_time': 'INTERVAL', 'departure_time': 'INTERVAL'})
     ),
     active_trips_with_stop_times AS (
       FROM 
@@ -90,15 +102,18 @@ export async function loadTransitData(date: Date) {
           FIRST((tst.last_stop_time - tst.first_stop_time)) AS trip_duration
       GROUP BY ALL
     )
-    FROM active_trips_with_stop_times
+    FROM active_trips_with_stop_times at
+    JOIN 
+      trips_per_route tpr ON at.route_id = tpr.route_id
     SELECT 
       first(trip_id) AS trip_id,
-      route_id,
+      at.route_id,
+      first(tpr.trip_count) AS trip_count,
       first(route_short_name) AS route_short_name,
       sum(epoch(trip_duration))/60/60 as total_duration
-    GROUP BY route_id,
+    GROUP BY at.route_id,
     ORDER BY total_duration
     `, db);
-    console.log(serviceIds);
 
+    return data as TransitData[];
 }
