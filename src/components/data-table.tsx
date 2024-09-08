@@ -6,7 +6,7 @@ import {
   TableHeader,
   TableRow,
 } from "~/components/ui/table";
-import { type TransitData } from "../types";
+import { type TransitData } from "../app/types";
 
 type CombinedDataType = {
   route_id: string;
@@ -32,22 +32,21 @@ export default function DataTable({
     total_duration_1: data1.total_duration,
     route_short_name: data1.route_short_name,
   }));
+  console.log(transitData1)
   transitData2.reduce((acc, data2) => {
-    const existing = acc.find((item) => item.route_id === data2.route_id);
+    const existing = acc.find((item) => item.route_short_name === data2.route_short_name);
     if (existing) {
       existing.trip_count_2 = Number(data2.trip_count);
       existing.total_duration_2 = data2.total_duration;
       existing.percent_change_hours =
-        existing.total_duration_1 &&
         Math.round(
-          ((existing.total_duration_2 - existing.total_duration_1) * 100) /
-            existing.total_duration_1,
+          ((existing.total_duration_2 - (existing.total_duration_1 ?? 0)) * 100) /
+            (existing.total_duration_1 ?? 0),
         );
       existing.percent_change_trips =
-        existing.trip_count_1 &&
         Math.round(
-          ((existing.trip_count_2 - existing.trip_count_1) * 100) /
-            existing.trip_count_1,
+          ((existing.trip_count_2 - (existing.trip_count_1 ?? 0)) * 100) /
+            (existing.trip_count_1 ?? 0),
         );
     } else {
       acc.push({
@@ -59,7 +58,8 @@ export default function DataTable({
     }
     return acc;
   }, combinedData);
-  console.log(combinedData);
+
+  const sortedData = combinedData.sort((a, b) => a.route_short_name.localeCompare(b.route_short_name, 'en', { numeric: true }));
 
   return (
     <Table>
@@ -73,7 +73,7 @@ export default function DataTable({
         </TableRow>
       </TableHeader>
       <TableBody>
-        {combinedData.map((route) => (
+        {sortedData.map((route) => (
           <TableRow key={route.route_id}>
             <TableCell>{route.route_short_name}</TableCell>
             <TableCell>

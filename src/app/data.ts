@@ -1,23 +1,23 @@
 "use server";
 import { Database } from "duckdb-async";
-import sql, {Sql} from "sql-template-tag";
+import sql, { Sql } from "sql-template-tag";
 import { TransitData } from "./types";
 
-async function executeQuery(query:Sql, db: Database) {
+async function executeQuery(query: Sql, db: Database) {
   const preparedQuery = await db.prepare(query.duckdb);
   const result = await preparedQuery.all(...query.values);
   return result;
 }
 
-export async function loadTransitData(date: Date) {
+export async function loadTransitData(date: Date, feedPath: string) {
   const db = await Database.create(":memory:");
-  const gtfsPath = "gtfs";
-  const calendarPath = `${gtfsPath}/calendar.txt`;
-  const calendarDatesPath = `${gtfsPath}/calendar_dates.txt`;
-  const tripsPath = `${gtfsPath}/trips.txt`;
-  const routesPath = `${gtfsPath}/routes.txt`;
-  const stopTimesPath = `${gtfsPath}/stop_times.txt`;
-  const data = await executeQuery(sql`
+  const calendarPath = `${feedPath}/calendar.txt`;
+  const calendarDatesPath = `${feedPath}/calendar_dates.txt`;
+  const tripsPath = `${feedPath}/trips.txt`;
+  const routesPath = `${feedPath}/routes.txt`;
+  const stopTimesPath = `${feedPath}/stop_times.txt`;
+  const data = await executeQuery(
+    sql`
     WITH regular_services AS (
         SELECT service_id,
             COLUMNS(lower(strftime(${date}, '%A'))) AS weekday
@@ -113,7 +113,12 @@ export async function loadTransitData(date: Date) {
       sum(epoch(trip_duration))/60/60 as total_duration
     GROUP BY at.route_id,
     ORDER BY total_duration
-    `, db);
+    `,
+    db,
+  );
 
-    return data as TransitData[];
+  return data.map((val) => ({
+    ...val,
+    trip_count: Number(val.trip_count),
+  })) as TransitData[];
 }
