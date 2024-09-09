@@ -36,9 +36,9 @@ export async function loadTransitData(date: Date, feedPath: string) {
         WHERE date = ${date}
     ),
     service_ids AS (
-      SELECT DISTINCT COALESCE(cd.service_id, rs.service_id) AS service_id
       FROM regular_services rs
       FULL OUTER JOIN calendar_dates cd ON rs.service_id = cd.service_id
+      SELECT DISTINCT COALESCE(cd.service_id, rs.service_id) AS service_id
       WHERE (rs.service_id IS NOT NULL AND (cd.service_id IS NULL OR cd.exception_type != 2))
       OR (cd.service_id IS NOT NULL AND cd.exception_type = 1)
     ),

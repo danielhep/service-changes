@@ -16,6 +16,7 @@ import { ChevronDownIcon, ChevronUpIcon } from "lucide-react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { getAppState } from "~/lib/utils";
 import { formatISO9075 } from "date-fns";
+import { Popover, PopoverContent, PopoverTrigger } from "./ui/popover";
 
 export default function Controls() {
   const router = useRouter();
@@ -46,7 +47,9 @@ export default function Controls() {
       value: Date | undefined,
       sp = new URLSearchParams(searchParams.toString()),
     ) => {
-      const formattedDate = value ? formatISO9075(value, { representation: "date" }) : undefined;
+      const formattedDate = value
+        ? formatISO9075(value, { representation: "date" })
+        : undefined;
       return createQS(paramName, formattedDate, sp);
     },
     [createQS, searchParams],
@@ -102,24 +105,18 @@ export default function Controls() {
       </div>
 
       {/* Advanced Options Toggle */}
-      <div>
-        <Button
-          variant="outline"
-          onClick={() => setShowAdvanced(!showAdvanced)}
-          className="w-full justify-between"
-        >
-          Advanced Options
-          {showAdvanced ? (
-            <ChevronUpIcon className="h-4 w-4" />
-          ) : (
-            <ChevronDownIcon className="h-4 w-4" />
-          )}
-        </Button>
-      </div>
-
-      {/* Date and Feed Selection */}
-      {showAdvanced && (
-        <div className="space-y-4 rounded-md border p-4">
+      <Popover>
+        <PopoverTrigger asChild>
+          <Button variant="outline" className="w-full justify-between">
+            Advanced Options
+            {showAdvanced ? (
+              <ChevronUpIcon className="h-4 w-4" />
+            ) : (
+              <ChevronDownIcon className="h-4 w-4" />
+            )}
+          </Button>
+        </PopoverTrigger>
+        <PopoverContent className="w-80">
           <div className="space-y-4">
             <h2 className="text-lg font-semibold">Advanced Options</h2>
             <div className="space-y-2">
@@ -165,8 +162,8 @@ export default function Controls() {
               </div>
             </div>
           </div>
-        </div>
-      )}
+        </PopoverContent>
+      </Popover>
     </div>
   );
 }
