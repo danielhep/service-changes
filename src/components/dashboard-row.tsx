@@ -1,18 +1,14 @@
+import { SummaryTransitData } from "~/data/processing";
 import { Card, CardContent, CardHeader, CardTitle } from "./ui/card";
 
 export default function DashboardRow({
-  tripsDiff,
-  hoursDiff,
-  routesDiff,
-  totalBeforeTrips,
-  totalBeforeHours,
+  summaryData
 }: {
-  tripsDiff: number;
-  hoursDiff: number;
-  routesDiff: number;
-  totalBeforeTrips: number;
-  totalBeforeHours: number;
+  summaryData: SummaryTransitData;
 }) {
+  const tripsDiff = summaryData.trip_count_after - summaryData.trip_count_before;
+  const hoursDiff = summaryData.total_duration_after - summaryData.total_duration_before;
+  const routesDiff = summaryData.added_routes.length - summaryData.removed_routes.length;
   return (
     <div className="grid grid-cols-1 gap-4 md:grid-cols-3">
       <Card>
@@ -27,7 +23,7 @@ export default function DashboardRow({
             {tripsDiff}
           </div>
           <p className="text-xs text-muted-foreground">
-            {((tripsDiff / totalBeforeTrips) * 100).toFixed(2)}% change
+            {summaryData.percent_change_trips}% change
           </p>
         </CardContent>
       </Card>
@@ -40,10 +36,10 @@ export default function DashboardRow({
         <CardContent>
           <div className="text-2xl font-bold">
             {hoursDiff > 0 ? "+" : ""}
-            {hoursDiff}
+            {Math.round(hoursDiff * 100) / 100}
           </div>
           <p className="text-xs text-muted-foreground">
-            {((hoursDiff / totalBeforeHours) * 100).toFixed(2)}% change
+            {summaryData.percent_change_hours}% change
           </p>
         </CardContent>
       </Card>
@@ -59,9 +55,7 @@ export default function DashboardRow({
             {routesDiff}
           </div>
           <p className="text-xs text-muted-foreground">
-            {routesDiff === 0
-              ? "No change"
-              : `${Math.abs(routesDiff)} ${routesDiff > 0 ? "added" : "removed"}`}
+            {summaryData.added_routes.length} added, {summaryData.removed_routes.length} removed
           </p>
         </CardContent>
       </Card>

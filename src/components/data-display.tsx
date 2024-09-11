@@ -20,6 +20,7 @@ export default async function DataDisplay({
   const combinedData = processData(beforeData, afterData);
   return (
     <div>
+      <DashboardRow summaryData={combinedData.summary} />
       <DataTable data={combinedData.perRoute} />
     </div>
   );
