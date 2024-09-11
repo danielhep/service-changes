@@ -1,7 +1,7 @@
 "use server";
 import { Database } from "duckdb-async";
-import sql, { Sql } from "sql-template-tag";
-import { TransitData } from "./types";
+import sql, { type Sql } from "sql-template-tag";
+import { type TransitData } from "../app/types";
 
 async function executeQuery(query: Sql, db: Database) {
   const preparedQuery = await db.prepare(query.duckdb);
@@ -16,6 +16,7 @@ export async function loadTransitData(date: Date, feedPath: string) {
   const tripsPath = `${feedPath}/trips.txt`;
   const routesPath = `${feedPath}/routes.txt`;
   const stopTimesPath = `${feedPath}/stop_times.txt`;
+  console.log(date);
   const data = await executeQuery(
     sql`
     WITH regular_services AS (

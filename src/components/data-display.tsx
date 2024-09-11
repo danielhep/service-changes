@@ -1,7 +1,8 @@
-import { loadTransitData } from "~/app/data";
+import { loadTransitData } from "~/data/data";
 import DataTable from "./data-table";
-import { Feed } from "~/data/feeds";
+import { type Feed } from "~/data/feeds";
 import DashboardRow from "./dashboard-row";
+import { processData } from "~/data/processing";
 
 export default async function DataDisplay({
   beforeDate,
@@ -16,31 +17,10 @@ export default async function DataDisplay({
 }) {
   const beforeData = await loadTransitData(beforeDate, beforeFeed.path);
   const afterData = await loadTransitData(afterDate, afterFeed.path);
-  const routesBefore = beforeData.length;
-  const routesAfter = afterData.length;
-  const tripsBefore = beforeData.reduce(
-    (sum, data) => sum + data.trip_count,
-    0,
-  );
-  const tripsAfter = afterData.reduce((sum, data) => sum + data.trip_count, 0);
-  const hoursBefore = beforeData.reduce(
-    (sum, data) => sum + data.total_duration,
-    0,
-  );
-  const hoursAfter = afterData.reduce(
-    (sum, data) => sum + data.total_duration,
-    0,
-  );
+  const combinedData = processData(beforeData, afterData);
   return (
     <div>
-      <DashboardRow
-        tripsDiff={tripsAfter - tripsBefore}
-        hoursDiff={hoursAfter - hoursBefore}
-        routesDiff={routesAfter - routesBefore}
-        totalBeforeTrips={tripsBefore}
-        totalBeforeHours={hoursBefore}
-      />
-      <DataTable transitData1={beforeData} transitData2={afterData} />
+      <DataTable data={combinedData.perRoute} />
     </div>
   );
 }

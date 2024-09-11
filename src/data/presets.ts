@@ -18,4 +18,12 @@ export const presets: Preset[] = [
     id: "metro-weekday",
     name: "Metro Weekday",
   },
+  {
+    beforeDate: parse("2024-09-13", "yyyy-MM-dd", new Date()),
+    afterDate: parse("2024-09-16", "yyyy-MM-dd", new Date()),
+    beforeFeed: "ct",
+    afterFeed: "ct",
+    id: "community-weekday",
+    name: "Community Transit Weekday",
+  },
 ];
