@@ -15,4 +15,9 @@ export const feeds: Feed[] = [
     name: "Sound Transit",
     path: "./gtfs/st",
   },
+  {
+    id: "ct",
+    name: "Community Transit",
+    path: "./gtfs/ct",
+  },
 ];
