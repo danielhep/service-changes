@@ -9,6 +9,17 @@ import {
 import { ArrowRight } from "lucide-react";
 import { cn } from "~/lib/utils";
 import { type CombinedTransitData } from "~/data/processing";
+import { Badge } from "./ui/badge";
+
+export const routeAddedRemovedBadge = (route: CombinedTransitData) => {
+  if (!route.trip_count_before && route.trip_count_after) {
+    return <Badge className="ml-2" variant="confirm">New</Badge>;
+  } else if (route.trip_count_before && !route.trip_count_after) {
+    return <Badge className="ml-2" variant="destructive">Deleted</Badge>;
+  } else {
+    return "";
+  }
+};
 
 export default function DataTable({
   data,
@@ -28,7 +39,7 @@ export default function DataTable({
       <TableBody>
         {data.map((route) => (
           <TableRow key={route.route_id}>
-            <TableCell>{route.route_short_name}</TableCell>
+            <TableCell>{route.route_short_name}{routeAddedRemovedBadge(route)}</TableCell>
             <TableCell>
               <div className="flex items-center gap-2">
               {route.total_duration_before
