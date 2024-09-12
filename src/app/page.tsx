@@ -3,6 +3,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "~/components/ui/card";
 import Controls from "~/components/controls";
 import DataDisplay from "~/components/data-display";
 import { getAppState } from "~/lib/utils";
+import { Suspense } from "react";
 
 export default async function Home({
   searchParams,
@@ -53,12 +54,14 @@ export default async function Home({
               </CardTitle>
             </CardHeader>
             <CardContent>
-              <DataDisplay
-                beforeDate={beforeDate}
-                afterDate={afterDate}
-                beforeFeed={beforeFeed}
-                afterFeed={afterFeed}
-              />
+              <Suspense fallback={<div>Loading...</div>}>
+                <DataDisplay
+                  beforeDate={beforeDate}
+                  afterDate={afterDate}
+                  beforeFeed={beforeFeed}
+                  afterFeed={afterFeed}
+                />
+              </Suspense>
             </CardContent>
           </Card>
         )}
