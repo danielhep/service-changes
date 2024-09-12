@@ -8,6 +8,9 @@ importers:
 
   .:
     dependencies:
+      '@danielhep/sql-template-tag':
+        specifier: ^5.2.1
+        version: 5.2.1
       '@radix-ui/react-checkbox':
         specifier: ^1.1.1
         version: 1.1.1(@types/react-dom@18.3.0)(@types/react@18.3.5)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
@@ -89,9 +92,6 @@ importers:
       server-only:
         specifier: ^0.0.1
         version: 0.0.1
-      sql-template-tag:
-        specifier: link:/Users/danielhep/git/sql-template-tag
-        version: link:../sql-template-tag
       superjson:
         specifier: ^2.2.1
         version: 2.2.1
@@ -153,6 +153,10 @@ packages:
   '@alloc/quick-lru@5.2.0':
     resolution: {integrity: sha512-UrcABB+4bUrFABwbluTIBErXwvbsU/V7TZWfmbgJfbkwiBuziS9gxdODUyuiecfdGQ85jglMW6juS3+z5TsKLw==}
     engines: {node: '>=10'}
+
+  '@danielhep/sql-template-tag@5.2.1':
+    resolution: {integrity: sha512-4vnKbuZo8o6PmSdjDZWSHvitjgt1RDlND6Kbn3MNJV5503b/8EifXe1/24NMm7JJRms/Td5hLKN6rL/KbcDalw==}
+    engines: {node: '>=14'}
 
   '@eslint-community/eslint-utils@4.4.0':
     resolution: {integrity: sha512-1/sA4dwrzBAyeUoQ6oxahHKmrZvsnLCg4RfxW3ZFGGmQkSNQPFNLV9CUEFQP1x9EYXHTo5p6xdhZM1Ne9p/AfA==}
@@ -2679,6 +2683,8 @@ packages:
 snapshots:
 
   '@alloc/quick-lru@5.2.0': {}
+
+  '@danielhep/sql-template-tag@5.2.1': {}
 
   '@eslint-community/eslint-utils@4.4.0(eslint@8.57.0)':
     dependencies:
