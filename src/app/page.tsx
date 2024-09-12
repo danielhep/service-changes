@@ -41,7 +41,7 @@ export default async function Home({
         {!allPresent && (
           <Card>
             <CardHeader>
-              <CardTitle>Please select a date range and feed.</CardTitle>
+              <CardTitle>Please select a preset or use the advanced options.</CardTitle>
             </CardHeader>
           </Card>
         )}
