@@ -18,6 +18,7 @@ export default async function Home({
         <div className="grid md:grid-cols-3">
           <Card>
             <CardHeader>
+              {/* eslint-disable-next-line react/no-unescaped-entities */}
               <CardTitle>What's going on here?</CardTitle>
             </CardHeader>
             <CardContent className="grid space-y-2">
