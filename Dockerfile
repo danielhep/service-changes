@@ -28,6 +28,9 @@ RUN pnpm run build
 # Start a new stage for a smaller production image
 FROM node:18-bullseye-slim AS production
 
+# Install pnpm
+RUN corepack enable && corepack prepare pnpm@latest --activate
+
 # Install necessary dependencies for DuckDB
 RUN apt-get update && apt-get install -y \
     libc6 \
