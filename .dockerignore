@@ -27,3 +27,14 @@ yarn-error.log*
 # OS generated files
 .DS_Store
 Thumbs.db
+
+
+
+.env
+Dockerfile
+.dockerignore
+node_modules
+npm-debug.log
+README.md
+.next
+.git

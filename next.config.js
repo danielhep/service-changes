@@ -10,6 +10,7 @@ const config = {
     config.externals = [...config.externals, "@mapbox/node-pre-gyp", "duckdb-async", "duckdb"];
     return config;
   },
+  output: "standalone",
 };
 
 export default config;
