@@ -9,13 +9,33 @@ export default async function Home({
 }: {
   searchParams: Record<string, string>;
 }) {
-  const { beforeDate, afterDate, beforeFeed, afterFeed} =
+  const { beforeDate, afterDate, beforeFeed, afterFeed } =
     getAppState(searchParams);
   const allPresent = beforeDate && afterDate && beforeFeed && afterFeed;
   return (
-    <div className="mx-auto">
+    <div className="mx-4">
       <div className="flex flex-col gap-4 py-4">
-        <Controls />
+        <div className="grid md:grid-cols-3">
+          <Card>
+            <CardHeader>
+              <CardTitle>What's going on here?</CardTitle>
+            </CardHeader>
+            <CardContent className="grid space-y-2">
+              <p>
+                This is a little tool to see how transit service is changing.
+                After selecting two dates, you can see the changes per route and
+                overall between the two dates.
+              </p>
+              <p>
+                Presets relating to current Seattle area service changes are
+                provided. You can also select your own dates and feeds to
+                compare.
+              </p>
+              <p>Made by @danielhep.</p>
+            </CardContent>
+          </Card>
+          <Controls className="col-span-2" />
+        </div>
         {!allPresent && (
           <Card>
             <CardHeader>

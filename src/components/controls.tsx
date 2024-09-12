@@ -14,7 +14,7 @@ import { DatePicker } from "./ui/datepicker";
 import { Button } from "./ui/button";
 import { ChevronDownIcon } from "lucide-react";
 import { useRouter, useSearchParams } from "next/navigation";
-import { getAppState } from "~/lib/utils";
+import { cn, getAppState } from "~/lib/utils";
 import { formatISO9075, isEqual } from "date-fns";
 import { Popover, PopoverContent, PopoverTrigger } from "./ui/popover";
 
@@ -86,7 +86,7 @@ const AdvancedContent = ({
   );
 };
 
-export default function Controls() {
+export default function Controls({ className }: { className: string }) {
   const router = useRouter();
   const searchParams = useSearchParams();
   const { beforeDate, afterDate, beforeFeed, afterFeed } =
@@ -143,25 +143,18 @@ export default function Controls() {
     }
   };
 
-
-
-  presets.forEach((preset) => {
-    console.log(preset.beforeDate, beforeDate)
-    console.log(preset.afterDate, afterDate)
-    console.log(preset.beforeFeed, beforeFeed?.id)
-    console.log(preset.afterFeed, afterFeed?.id)
-  })
-
   const selectedPreset = presets.find(
     (preset) =>
-      beforeDate && isEqual(preset.beforeDate, beforeDate) &&
-      afterDate && isEqual(preset.afterDate, afterDate) &&
+      beforeDate &&
+      isEqual(preset.beforeDate, beforeDate) &&
+      afterDate &&
+      isEqual(preset.afterDate, afterDate) &&
       preset.beforeFeed === beforeFeed?.id &&
       preset.afterFeed === afterFeed?.id,
   );
 
   return (
-    <div className="m-auto flex flex-col gap-4">
+    <div className={cn("m-auto flex flex-col gap-4", className)}>
       {/* Presets */}
       <div>
         <h2 className="mb-2 text-lg font-semibold">Presets</h2>
@@ -181,26 +174,26 @@ export default function Controls() {
 
       {/* Advanced Options Toggle */}
       <div className="flex items-center justify-between gap-2">
-      <Popover>
-        <PopoverTrigger asChild>
-          <Button variant="secondary" className="w-full justify-between">
-            Advanced Options
-            <ChevronDownIcon className="h-4 w-4" />
-          </Button>
-        </PopoverTrigger>
-        <PopoverContent className="w-80">
-          <AdvancedContent
-            setBeforeFeed={setBeforeFeed}
-            setAfterFeed={setAfterFeed}
-            beforeFeed={beforeFeed}
-            afterFeed={afterFeed}
-            setBeforeDate={setBeforeDate}
-            setAfterDate={setAfterDate}
-            beforeDate={beforeDate}
-            afterDate={afterDate}
-          />
-        </PopoverContent>
-      </Popover>
+        <Popover>
+          <PopoverTrigger asChild>
+            <Button variant="secondary" className="w-full justify-between">
+              Advanced Options
+              <ChevronDownIcon className="h-4 w-4" />
+            </Button>
+          </PopoverTrigger>
+          <PopoverContent className="w-80">
+            <AdvancedContent
+              setBeforeFeed={setBeforeFeed}
+              setAfterFeed={setAfterFeed}
+              beforeFeed={beforeFeed}
+              afterFeed={afterFeed}
+              setBeforeDate={setBeforeDate}
+              setAfterDate={setAfterDate}
+              beforeDate={beforeDate}
+              afterDate={afterDate}
+            />
+          </PopoverContent>
+        </Popover>
       </div>
     </div>
   );
