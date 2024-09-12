@@ -20,6 +20,9 @@ export default function RootLayout({
       className={`${GeistSans.variable}`}
       suppressHydrationWarning
     >
+      <head>
+        <script defer src="https://umami.danielhep.me/script.js" data-website-id="837c41b9-bd70-4b82-a29e-944e06f02d67"></script>
+      </head>
       <body>
         <ThemeProvider
           attribute="class"
