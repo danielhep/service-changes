@@ -33,7 +33,7 @@ export default async function Home({
                 provided. You can also select your own dates and feeds to
                 compare.
               </p>
-              <p>Made by @danielhep.</p>
+              <p>Made by <a className="underline" href="https://twitter.com/danielhep" target="_blank" rel="noreferrer">@danielhep</a>. Source code available <a className="underline" href="https://github.com/danielhep/service-changes" target="_blank" rel="noreferrer">on GitHub</a>.</p>
             </CardContent>
           </Card>
           <Controls className="col-span-2" />
