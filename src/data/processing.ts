@@ -10,6 +10,9 @@ export type CombinedTransitData = {
   total_duration_after?: number;
   percent_change_hours?: number;
   percent_change_trips?: number;
+  avg_duration_before?: number;
+  avg_duration_after?: number;
+  percent_change_avg?: number;
 };
 
 export type SummaryTransitData = {
@@ -85,12 +88,15 @@ function combineTransitFeeds(
       if (isBeforeArray) {
         updatedItem.total_duration_before = item.total_duration;
         updatedItem.trip_count_before = item.trip_count;
+        updatedItem.avg_duration_before = item.avg_duration;
       } else {
         updatedItem.total_duration_after = item.total_duration;
         updatedItem.trip_count_after = item.trip_count;
+        updatedItem.avg_duration_after = item.avg_duration; 
         if (
           updatedItem.trip_count_before &&
-          updatedItem.total_duration_before
+          updatedItem.total_duration_before &&
+          updatedItem.avg_duration_before
         ) {
           updatedItem.percent_change_hours = Math.round(
             ((updatedItem.total_duration_after -
@@ -102,6 +108,11 @@ function combineTransitFeeds(
             ((updatedItem.trip_count_after - updatedItem.trip_count_before) *
               100) /
               updatedItem.trip_count_before,
+          );
+          updatedItem.percent_change_avg = Math.round(
+            ((updatedItem.avg_duration_after - updatedItem.avg_duration_before) *
+              100) /
+              updatedItem.avg_duration_before,
           );
         }
       }
@@ -116,6 +127,8 @@ function combineTransitFeeds(
         route_short_name: item.route_short_name,
         trip_count_before: isBeforeArray ? item.trip_count : undefined,
         trip_count_after: isBeforeArray ? undefined : item.trip_count,
+        avg_duration_after: isBeforeArray ? undefined : item.avg_duration,
+        avg_duration_before: isBeforeArray ? item.avg_duration : undefined,
       };
       combinedMap.set(item.route_short_name, newItem);
     }

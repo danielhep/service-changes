@@ -15,6 +15,7 @@ export type TransitData = {
   trip_id: string;
   route_short_name: string;
   trip_count: number;
+  avg_duration: number;
 };
 
 export async function loadTransitData(date: Date, feedPath: string) {
@@ -122,6 +123,7 @@ export async function loadTransitData(date: Date, feedPath: string) {
       first(tpr.trip_count) AS trip_count,
       first(route_short_name) AS route_short_name,
       sum(epoch(trip_duration))/60/60 as total_duration,
+      avg(epoch(trip_duration))/60/60 as avg_duration,
       rs.service_id as service_id,
       rs.start_date as start_date,
       rs.end_date as end_date
