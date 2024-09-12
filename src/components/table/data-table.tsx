@@ -28,7 +28,7 @@ export default function DataTable({
 }) {
 
   return (
-    <Table className="max-w-2xl m-auto">
+    <Table className="max-w-2xl m-auto whitespace-nowrap">
       <TableHeader>
         <TableRow>
           <TableHead>Route Short Name</TableHead>

@@ -158,7 +158,7 @@ export default function Controls({ className }: { className: string }) {
       {/* Presets */}
       <div>
         <h2 className="mb-2 text-lg font-semibold">Presets</h2>
-        <div className="grid grid-cols-2 gap-2 md:grid-cols-3">
+        <div className="grid grid-cols-1 gap-2 md:grid-cols-3">
           {presets.map((preset) => (
             <Button
               key={preset.id}

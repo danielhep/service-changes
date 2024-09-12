@@ -31,7 +31,7 @@ export default function RootLayout({
           disableTransitionOnChange
         >
           <header className="h-16 w-full bg-purple-900 shadow-sm flex items-center px-4">
-            <h1 className="text-4xl font-bold text-white">Seattle Area Service Changes</h1>
+            <h1 className="md:text-4xl font-bold text-white text-xl">Seattle Area Service Changes</h1>
           </header>
           {children}
         </ThemeProvider>
