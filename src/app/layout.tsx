@@ -11,6 +11,13 @@ export const metadata: Metadata = {
   icons: [{ rel: "icon", url: "/favicon.ico" }],
 };
 
+const TrackingTag = () => {
+  if (process.env.NODE_ENV === 'production') {
+    return <script defer src="https://umami.danielhep.me/script.js" data-website-id="837c41b9-bd70-4b82-a29e-944e06f02d67"></script>
+  }
+  return null;
+};
+
 export default function RootLayout({
   children,
 }: Readonly<{ children: React.ReactNode }>) {
@@ -21,7 +28,7 @@ export default function RootLayout({
       suppressHydrationWarning
     >
       <head>
-        <script defer src="https://umami.danielhep.me/script.js" data-website-id="837c41b9-bd70-4b82-a29e-944e06f02d67"></script>
+        <TrackingTag />
       </head>
       <body>
         <ThemeProvider
