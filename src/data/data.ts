@@ -1,7 +1,7 @@
 "use server";
 import { fromZonedTime } from "date-fns-tz";
 import { Database } from "duckdb-async";
-import sql, { type Sql } from "sql-template-tag";
+import sql, { type Sql } from "@danielhep/sql-template-tag";
 
 async function executeQuery(query: Sql, db: Database) {
   const preparedQuery = await db.prepare(query.duckdb);
