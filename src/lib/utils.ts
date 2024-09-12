@@ -2,7 +2,6 @@ import { clsx, type ClassValue } from "clsx";
 import { parse, setHours } from "date-fns";
 import { twMerge } from "tailwind-merge";
 import { type Feed, feeds } from "~/data/feeds";
-import { utcToZonedTime } from 'date-fns-tz'
 
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
