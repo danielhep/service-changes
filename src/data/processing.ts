@@ -1,4 +1,4 @@
-import { type TransitData } from "~/app/types";
+import { TransitData } from "./data";
 
 export type CombinedTransitData = {
   route_id: string;
@@ -70,7 +70,7 @@ function calculateSummary(data: CombinedTransitData[]): SummaryTransitData {
 function combineTransitFeeds(
   array1: TransitData[],
   array2: TransitData[],
-): CombinedDataType {
+): CombinedTransitData[] {
   const combinedMap = new Map<string, CombinedTransitData>();
 
   function updateMap(item: TransitData, isBeforeArray: boolean) {
@@ -125,11 +125,7 @@ function combineTransitFeeds(
   array1.forEach((item) => updateMap(item, true));
   array2.forEach((item) => updateMap(item, false));
 
-  const combinedArray = [...combinedMap.values()];
-  return {
-    perRoute: combinedArray,
-    summary: calculateSummary(combinedArray),
-  };
+  return [...combinedMap.values()];
 }
 
 export function processData(
@@ -138,5 +134,12 @@ export function processData(
 ) {
   const combinedData = combineTransitFeeds(beforeData, afterData);
 
-  return combinedData;
+  return {
+    perRoute: combinedData.sort((a, b) =>
+      b.route_short_name.localeCompare(a.route_short_name, undefined, {
+        numeric: true,
+      }),
+    ),
+    summary: calculateSummary(combinedData),
+  };
 }

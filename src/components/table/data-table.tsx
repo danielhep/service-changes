@@ -9,7 +9,7 @@ import {
 import { ArrowRight } from "lucide-react";
 import { cn } from "~/lib/utils";
 import { type CombinedTransitData } from "~/data/processing";
-import { Badge } from "./ui/badge";
+import { Badge } from "../ui/badge";
 
 export const routeAddedRemovedBadge = (route: CombinedTransitData) => {
   if (!route.trip_count_before && route.trip_count_after) {

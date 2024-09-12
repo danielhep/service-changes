@@ -1,13 +1,22 @@
 "use server";
+import { format } from "date-fns";
+import { fromZonedTime, getTimezoneOffset, toZonedTime } from "date-fns-tz";
 import { Database } from "duckdb-async";
 import sql, { type Sql } from "sql-template-tag";
-import { type TransitData } from "../app/types";
 
 async function executeQuery(query: Sql, db: Database) {
   const preparedQuery = await db.prepare(query.duckdb);
   const result = await preparedQuery.all(...query.values);
   return result;
 }
+
+export type TransitData = {
+  route_id: string;
+  total_duration: number;
+  trip_id: string;
+  route_short_name: string;
+  trip_count: number;
+};
 
 export async function loadTransitData(date: Date, feedPath: string) {
   const db = await Database.create(":memory:");
@@ -16,17 +25,19 @@ export async function loadTransitData(date: Date, feedPath: string) {
   const tripsPath = `${feedPath}/trips.txt`;
   const routesPath = `${feedPath}/routes.txt`;
   const stopTimesPath = `${feedPath}/stop_times.txt`;
-  console.log(date);
+  const UTCDate = fromZonedTime(date, "UTC");
   const data = await executeQuery(
     sql`
     WITH regular_services AS (
         SELECT service_id,
-            COLUMNS(lower(strftime(${date}, '%A'))) AS weekday
+            start_date,
+            end_date,
+            COLUMNS(lower(strftime(${UTCDate}, '%A'))) AS weekday
         FROM read_csv(${calendarPath},
                     dateformat = '%Y%m%d', 
                     types={'start_date': 'DATE', 'end_date': 'DATE'})
         WHERE weekday = 1
-        AND start_date <= ${date} AND end_date >= ${date}
+        AND start_date <= ${UTCDate} AND end_date >= ${UTCDate}
     ),
     calendar_dates AS (
         SELECT service_id,
@@ -34,7 +45,7 @@ export async function loadTransitData(date: Date, feedPath: string) {
         FROM read_csv(${calendarDatesPath},
                     dateformat = '%Y%m%d',
                     types={'date': 'DATE'})
-        WHERE date = ${date}
+        WHERE date = ${UTCDate}
     ),
     service_ids AS (
       FROM regular_services rs
@@ -103,7 +114,7 @@ export async function loadTransitData(date: Date, feedPath: string) {
           FIRST((tst.last_stop_time - tst.first_stop_time)) AS trip_duration
       GROUP BY ALL
     )
-    FROM active_trips_with_stop_times at
+    FROM active_trips_with_stop_times at, regular_services rs
     JOIN 
       trips_per_route tpr ON at.route_id = tpr.route_id
     SELECT 
@@ -111,8 +122,11 @@ export async function loadTransitData(date: Date, feedPath: string) {
       at.route_id,
       first(tpr.trip_count) AS trip_count,
       first(route_short_name) AS route_short_name,
-      sum(epoch(trip_duration))/60/60 as total_duration
-    GROUP BY at.route_id,
+      sum(epoch(trip_duration))/60/60 as total_duration,
+      rs.service_id as service_id,
+      rs.start_date as start_date,
+      rs.end_date as end_date
+    GROUP BY ALL
     ORDER BY total_duration
     `,
     db,

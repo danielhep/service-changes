@@ -1,4 +1,4 @@
-import { SummaryTransitData } from "~/data/processing";
+import { type SummaryTransitData } from "~/data/processing";
 import { Card, CardContent, CardHeader, CardTitle } from "./ui/card";
 
 export default function DashboardRow({
