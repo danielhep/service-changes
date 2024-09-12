@@ -165,6 +165,8 @@ export default function Controls({ className }: { className: string }) {
               className="w-full"
               onClick={() => handleSetPreset(preset)}
               variant={selectedPreset?.id === preset.id ? "default" : "outline"}
+              data-umami-event="preset-button"
+              data-umami-event-id={preset.id}
             >
               {preset.name}
             </Button>
@@ -176,7 +178,7 @@ export default function Controls({ className }: { className: string }) {
       <div className="flex items-center justify-between gap-2">
         <Popover>
           <PopoverTrigger asChild>
-            <Button variant="secondary" className="w-full justify-between">
+            <Button variant="secondary" className="w-full justify-between" data-umami-event="advanced-options-toggle">
               Advanced Options
               <ChevronDownIcon className="h-4 w-4" />
             </Button>
