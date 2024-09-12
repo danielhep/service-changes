@@ -1,5 +1,11 @@
-# Use the official Node.js image as the base image
-FROM node:18-alpine AS base
+# Use a Debian-based Node.js image
+FROM node:18-bullseye-slim AS base
+
+# Install necessary dependencies for DuckDB
+RUN apt-get update && apt-get install -y \
+    libc6 \
+    libstdc++6 \
+    && rm -rf /var/lib/apt/lists/*
 
 # Install pnpm
 RUN corepack enable && corepack prepare pnpm@latest --activate
@@ -20,7 +26,13 @@ COPY . .
 RUN pnpm run build
 
 # Start a new stage for a smaller production image
-FROM node:18-alpine AS production
+FROM node:18-bullseye-slim AS production
+
+# Install necessary dependencies for DuckDB
+RUN apt-get update && apt-get install -y \
+    libc6 \
+    libstdc++6 \
+    && rm -rf /var/lib/apt/lists/*
 
 WORKDIR /app
 
