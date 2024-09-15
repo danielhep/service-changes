@@ -39,7 +39,7 @@ const FormattedTime = ({ time }: { time?: number }) => {
 
 export default function DataTable({ data }: { data: CombinedTransitData[] }) {
   return (
-    <Table className="m-auto max-w-2xl whitespace-nowrap">
+    <Table className="m-auto max-w-4xl whitespace-nowrap">
       <TableHeader>
         <TableRow>
           <TableHead>Route Short Name</TableHead>
