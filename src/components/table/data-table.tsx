@@ -33,7 +33,6 @@ export const routeAddedRemovedBadge = (route: CombinedTransitData) => {
 const FormattedTime = ({ time }: { time?: number }) => {
   if (!time) return <>-</>;
   const date = addHours(new Date(0, 0, 0, 0, 0, 0, 0), time);
-  console.log(date);
   return <div className="flex items-center gap-2">{format(date, "K:mm")}</div>;
 };
 

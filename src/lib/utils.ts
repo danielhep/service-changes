@@ -1,7 +1,7 @@
 import { clsx, type ClassValue } from "clsx";
 import { parse, setHours } from "date-fns";
 import { twMerge } from "tailwind-merge";
-import { type Feed, feeds } from "~/data/feeds";
+import { type FeedGroup, feedGroups } from "~/data/feeds";
 
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
@@ -10,8 +10,8 @@ export function cn(...inputs: ClassValue[]) {
 type AppState = {
   beforeDate?: Date;
   afterDate?: Date;
-  beforeFeed?: Feed;
-  afterFeed?: Feed;
+  beforeFeed?: FeedGroup;
+  afterFeed?: FeedGroup;
 };
 
 export function getAppState(
@@ -29,8 +29,8 @@ export function getAppState(
   const afterDate = sp.afterDate
     ? parse(sp.afterDate, "yyyy-MM-dd", new Date())
     : undefined;
-  const beforeFeed = feeds.find((feed) => feed.id === sp.beforeFeed);
-  const afterFeed = feeds.find((feed) => feed.id === sp.afterFeed);
+  const beforeFeed = feedGroups.find((feed) => feed.id === sp.beforeFeed);
+  const afterFeed = feedGroups.find((feed) => feed.id === sp.afterFeed);
   return {
     beforeDate: beforeDate ? setHours(beforeDate, 0) : undefined,
     afterDate: afterDate ? setHours(afterDate, 0) : undefined,
