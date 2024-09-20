@@ -5,7 +5,8 @@ import { type Metadata } from "next";
 
 import { ThemeProvider } from "~/components/theme-provider";
 import { identifierToFeedAndDate } from "~/data/feeds";
-import Header from "~/components/header";
+import { number } from "zod";
+import HierarchicalFeedSelect from "~/components/ui/hierarchy-feed-select";
 
 export const metadata: Metadata = {
   title: "Service Change Analysis",
@@ -24,25 +25,8 @@ export default function RootLayout({
   children,
 }: Readonly<{ children: React.ReactNode, params: Record<string, string> }>) {
   return (
-    <html
-      lang="en"
-      className={`${GeistSans.variable}`}
-      suppressHydrationWarning
-    >
-      <head>
-        <TrackingTag />
-      </head>
-      <body>
-        <ThemeProvider
-          attribute="class"
-          defaultTheme="dark"
-          enableSystem
-          disableTransitionOnChange
-        >
-          <Header />
-          {children}
-        </ThemeProvider>
-      </body>
-    </html>
+    <>
+    {children}
+    </>
   );
 }

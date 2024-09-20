@@ -1,14 +1,5 @@
 import { parse } from "date-fns";
 
-export type Preset = {
-  beforeDate: Date;
-  afterDate: Date;
-  beforeFeed: string;
-  afterFeed: string;
-  id: string;
-  name: string;
-};
-
 export type Feed = {
   id: string;
   path: string;
@@ -40,7 +31,8 @@ const getDateMap = (dateStrs: Record<string, string>): Record<string, Date> => {
 // Feed Identifiers are in the following format: feedGroupId:feedId:dateId
 // For example: kcm:sept-2024:beforeSat
 export const identifierToFeedAndDate = (identifier: string): FeedAndDate => {
-  const [feedGroupId, feedId, dateId] = identifier.split(":");
+  const decodedIdentifier = decodeURIComponent(identifier);
+  const [feedGroupId, feedId, dateId] = decodedIdentifier.split(":");
   if (!feedGroupId || !feedId || !dateId) {
     throw new Error(`Invalid identifier: ${identifier}`);
   }
