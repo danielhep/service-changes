@@ -1,3 +1,4 @@
+import FeedSelector from "./feed-selector";
 import { PresetSelector } from "./preset-selector";
 
 export default function Home() {
@@ -12,6 +13,9 @@ export default function Home() {
       <p>Begin with a preset that corresponds to the most recent/upcoming service change or manually select your inputs below.</p>
       <div>
         <PresetSelector />
+      </div>
+      <div>
+        <FeedSelector />
       </div>
     </div>
   );
