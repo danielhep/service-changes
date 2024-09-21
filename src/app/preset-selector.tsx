@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { buttonVariants } from "~/components/ui/button";
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "~/components/ui/tooltip";
 import { type Preset, presets } from "~/data/presets";
 
 export const PresetSelector = () => {
@@ -18,20 +19,31 @@ export const PresetSelector = () => {
 
   return (
     <div className="mx-auto w-full">
-      {Object.keys(presetsByRegion).map((region, index) => (
-        <div key={index} className="mb-6">
-          <h2 className="text-sm mb-2 text-left">{region}:</h2>
-          <div className="grid grid-cols-3 gap-2">
-            {presetsByRegion[region]?.map((preset, presetIndex) => (
-              <Link
-                className={buttonVariants({ variant: "outline" })}
-                key={presetIndex}
-                href={`/${preset.beforeIdentifier}/compareTo/${preset.afterIdentifier}`}
-              >{preset.name}</Link>
-            ))}
+      <TooltipProvider>
+        {Object.keys(presetsByRegion).map((region, index) => (
+          <div key={index} className="mb-6">
+            <h2 className="mb-2 text-left text-sm">{region}:</h2>
+            <div className="grid grid-cols-3 gap-2">
+              {presetsByRegion[region]?.map((preset, presetIndex) => (
+                <Tooltip key={presetIndex}>
+                  <TooltipTrigger asChild>
+                    <Link
+                      className={buttonVariants({ variant: "outline" })}
+                      key={presetIndex}
+                      href={`/${preset.beforeIdentifier}/compareTo/${preset.afterIdentifier}`}
+                    >
+                      {preset.name}
+                    </Link>
+                  </TooltipTrigger>
+                  <TooltipContent>
+                    Comparing {preset.beforeIdentifier} to {preset.afterIdentifier}
+                  </TooltipContent>
+                </Tooltip>
+              ))}
+            </div>
           </div>
-        </div>
-      ))}
+        ))}
+      </TooltipProvider>
     </div>
   );
 };
