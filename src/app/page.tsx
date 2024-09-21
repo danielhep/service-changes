@@ -12,10 +12,12 @@ import { Button } from "~/components/ui/button";
 import { type FeedAndDate } from "~/data/feeds";
 import { useState } from "react";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 
 export default function Home() {
   const [firstFeed, setFirstFeed] = useState<FeedAndDate | null>(null);
   const [secondFeed, setSecondFeed] = useState<FeedAndDate | null>(null);
+  const router = useRouter();
   return (
     <div className="m-auto my-4 mt-4 grid max-w-3xl grid-cols-1 space-y-4">
       {/* <h1 className="text-4xl font-bold">
@@ -57,13 +59,9 @@ export default function Home() {
           <Button
             disabled={!firstFeed || !secondFeed}
             aria-disabled={!firstFeed || !secondFeed}
-            asChild
+            onClick={() => {router.push(firstFeed && secondFeed ? `/${firstFeed?.identifier}/compareTo/${secondFeed?.identifier}`: "")}}
           >
-            <Link
-              href={`/${firstFeed?.identifier}/compareTo/${secondFeed?.identifier}`}
-            >
-              Compare these feeds
-            </Link>
+            Compare these feeds
           </Button>
         </CardContent>
       </Card>
