@@ -2,6 +2,7 @@ import Link from "next/link";
 import { buttonVariants } from "~/components/ui/button";
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "~/components/ui/tooltip";
 import { type Preset, presets } from "~/data/presets";
+import { cn } from "~/lib/utils";
 
 export const PresetSelector = () => {
   const presetsByRegion = presets.reduce(
@@ -28,7 +29,7 @@ export const PresetSelector = () => {
                 <Tooltip key={presetIndex}>
                   <TooltipTrigger asChild>
                     <Link
-                      className={buttonVariants({ variant: "outline" })}
+                      className={cn(buttonVariants({ variant: "outline" }), 'text-wrap')}
                       key={presetIndex}
                       href={`/${preset.beforeIdentifier}/compareTo/${preset.afterIdentifier}`}
                     >

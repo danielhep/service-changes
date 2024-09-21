@@ -3,6 +3,7 @@ import { parse } from "date-fns";
 export type Feed = {
   id: string;
   path: string;
+  name: string;
   dates: Record<string, Date>;
 };
 
@@ -13,9 +14,9 @@ export type FeedGroup = {
 };
 
 export class FeedAndDate {
-  private dateId: string;
-  private feedId: string;
-  private feedGroup: FeedGroup;
+  #dateId: string;
+  #feedId: string;
+  #feedGroup: FeedGroup;
 
   constructor(feedGroup: FeedGroup, feedId: string, dateId: string) {
     if (feedGroup.feeds.find((feed) => feed.id === feedId) === undefined) {
@@ -24,9 +25,9 @@ export class FeedAndDate {
     if (feedGroup.feeds.find((feed) => feed.dates[dateId] === undefined)) {
       throw new Error(`Date not found: ${feedGroup.id}:${feedId}:${dateId}`);
     }
-    this.dateId = dateId;
-    this.feedId = feedId;
-    this.feedGroup = feedGroup;
+    this.#dateId = dateId;
+    this.#feedId = feedId;
+    this.#feedGroup = feedGroup;
   }
 
   // Feed Identifiers are in the following format: feedGroupId:feedId:dateId
@@ -57,19 +58,31 @@ export class FeedAndDate {
   // Feed Identifiers are in the following format: feedGroupId:feedId:dateId
   // For example: kcm:sept-2024:beforeSat
   get identifier(): string {
-    return `${this.feedGroup.id}:${this.feedId}:${this.dateId}`;
+    return `${this.feedGroup.id}:${this.#feedId}:${this.#dateId}`;
   }
 
   get feed(): Feed {
     // This is guaranteed to be defined because we check for it in the constructor
     // and the properties are private
-    return this.feedGroup.feeds.find((feed) => feed.id === this.feedId)!;
+    return this.feedGroup.feeds.find((feed) => feed.id === this.#feedId)!;
+  }
+
+  get feedGroup(): FeedGroup {
+    return this.#feedGroup;
   }
 
   get date(): Date {
     // This is guaranteed to be defined because we check for it in the constructor
     // and the properties are private
-    return this.feed.dates[this.dateId]!;
+    return this.feed.dates[this.#dateId]!;
+  }
+
+  hasSameFeed(other: FeedAndDate): boolean {
+    return this.feedGroup.id === other.feedGroup.id && this.#feedId === other.#feedId;
+  }
+
+  hasSameFeedGroup(other: FeedAndDate): boolean {
+    return this.feedGroup.id === other.feedGroup.id;
   }
 }
 
@@ -91,6 +104,7 @@ export const feedGroups: FeedGroup[] = [
       {
         id: "sept-2024",
         path: "./gtfs/kcm",
+        name: "Sept 2024 Service Changes",
         dates: getDateMap({
           beforeWeekday: "2024-09-13",
           afterWeekday: "2024-09-16",
@@ -109,6 +123,7 @@ export const feedGroups: FeedGroup[] = [
       {
         id: "sept-2024",
         path: "./gtfs/st",
+        name: "Sept 2024 Service Changes",
         dates: getDateMap({
           beforeWeekday: "2024-08-23",
           afterWeekday: "2024-09-16",
@@ -127,6 +142,7 @@ export const feedGroups: FeedGroup[] = [
       {
         id: "sept-2024",
         path: "./gtfs/ct",
+        name: "Sept 2024 Service Changes",
         dates: getDateMap({
           beforeWeekday: "2024-09-13",
           afterWeekday: "2024-09-16",
@@ -144,6 +160,7 @@ export const feedGroups: FeedGroup[] = [
     feeds: [
       {
         id: "post-calmod",
+        name: "Post-Electrification",
         path: "./gtfs/caltrain-calmod",
         dates: getDateMap({
           weekday: "2024-09-27",
@@ -152,6 +169,7 @@ export const feedGroups: FeedGroup[] = [
       },
       {
         id: "pre-calmod",
+        name: "Pre-Electrification",
         path: "./gtfs/caltrain-diesel",
         dates: getDateMap({
           weekday: "2024-09-19",
