@@ -4,6 +4,8 @@ import { GeistSans } from "geist/font/sans";
 import { type Metadata } from "next";
 
 import { ThemeProvider } from "~/components/theme-provider";
+import { identifierToFeedAndDate } from "~/data/feeds";
+import Header from "~/components/header";
 
 export const metadata: Metadata = {
   title: "Service Change Analysis",
@@ -20,7 +22,7 @@ const TrackingTag = () => {
 
 export default function RootLayout({
   children,
-}: Readonly<{ children: React.ReactNode }>) {
+}: Readonly<{ children: React.ReactNode, params: Record<string, string> }>) {
   return (
     <html
       lang="en"
@@ -37,9 +39,7 @@ export default function RootLayout({
           enableSystem
           disableTransitionOnChange
         >
-          <header className="h-16 w-full bg-purple-900 shadow-sm flex items-center px-4">
-            <h1 className="md:text-4xl font-bold text-white text-xl">Seattle Area Service Changes</h1>
-          </header>
+          <Header />
           {children}
         </ThemeProvider>
       </body>

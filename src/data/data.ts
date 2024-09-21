@@ -2,6 +2,7 @@
 import { fromZonedTime } from "date-fns-tz";
 import { Database } from "duckdb-async";
 import sql, { type Sql } from "@danielhep/sql-template-tag";
+import { FeedAndDate } from "./feeds";
 
 async function executeQuery(query: Sql, db: Database) {
   const preparedQuery = await db.prepare(query.duckdb);
@@ -18,7 +19,9 @@ export type TransitData = {
   avg_duration: number;
 };
 
-export async function loadTransitData(date: Date, feedPath: string) {
+export async function loadTransitData(feedAndDate: FeedAndDate) {
+  const feedPath = feedAndDate.feed.path;
+  const date = feedAndDate.date;
   const db = await Database.create(":memory:");
   const calendarPath = `${feedPath}/calendar.txt`;
   const calendarDatesPath = `${feedPath}/calendar_dates.txt`;

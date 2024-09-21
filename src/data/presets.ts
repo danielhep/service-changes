@@ -1,62 +1,87 @@
-import { parse } from "date-fns";
-
 export type Preset = {
-  beforeDate: Date;
-  afterDate: Date;
-  beforeFeed: string;
-  afterFeed: string;
+  beforeIdentifier: string;
+  afterIdentifier: string;
   id: string;
   name: string;
+  region: string;
 };
 
 export const presets: Preset[] = [
   {
-    beforeDate: parse("2024-09-13", "yyyy-MM-dd", new Date()),
-    afterDate: parse("2024-09-16", "yyyy-MM-dd", new Date()),
-    beforeFeed: "kcm",
-    afterFeed: "kcm",
     id: "kcm-weekday",
-    name: "Metro Weekday",
+    name: "KCM Weekday",
+    region: "Puget Sound",
+    beforeIdentifier: "kcm:sept-2024:beforeWeekday",
+    afterIdentifier: "kcm:sept-2024:afterWeekday",
   },
   {
-    beforeDate: parse("2024-09-7", "yyyy-MM-dd", new Date()),
-    afterDate: parse("2024-09-21", "yyyy-MM-dd", new Date()),
-    beforeFeed: "kcm",
-    afterFeed: "kcm",
-    id: "kcm-sat",
-    name: "Metro Saturday",
+    id: "kcm-saturday",
+    name: "KCM Saturday",
+    region: "Puget Sound",
+    beforeIdentifier: "kcm:sept-2024:beforeSat",
+    afterIdentifier: "kcm:sept-2024:afterSat",
   },
   {
-    beforeDate: parse("2024-09-8", "yyyy-MM-dd", new Date()),
-    afterDate: parse("2024-09-22", "yyyy-MM-dd", new Date()),
-    beforeFeed: "kcm",
-    afterFeed: "kcm",
-    id: "kcm-sun",
-    name: "Metro Sunday",
+    id: "kcm-sunday",
+    name: "KCM Sunday",
+    region: "Puget Sound",
+    beforeIdentifier: "kcm:sept-2024:beforeSun",
+    afterIdentifier: "kcm:sept-2024:afterSun",
   },
   {
-    beforeDate: parse("2024-09-13", "yyyy-MM-dd", new Date()),
-    afterDate: parse("2024-09-16", "yyyy-MM-dd", new Date()),
-    beforeFeed: "ct",
-    afterFeed: "ct",
     id: "ct-weekday",
-    name: "Community Transit Weekday",
+    name: "CT Weekday",
+    region: "Puget Sound",
+    beforeIdentifier: "ct:sept-2024:beforeWeekday",
+    afterIdentifier: "ct:sept-2024:afterWeekday",
   },
   {
-    beforeDate: parse("2024-09-7", "yyyy-MM-dd", new Date()),
-    afterDate: parse("2024-09-21", "yyyy-MM-dd", new Date()),
-    beforeFeed: "ct",
-    afterFeed: "ct",
-    id: "ct-sat",
-    name: "Community Transit Saturday",
+    id: "ct-saturday",
+    name: "CT Saturday",
+    region: "Puget Sound",
+    beforeIdentifier: "ct:sept-2024:beforeSat",
+    afterIdentifier: "ct:sept-2024:afterSat",
   },
   {
-    beforeDate: parse("2024-09-8", "yyyy-MM-dd", new Date()),
-    afterDate: parse("2024-09-22", "yyyy-MM-dd", new Date()),
-    beforeFeed: "ct",
-    afterFeed: "ct",
-    id: "ct-sun",
-    name: "Community Transit Sunday",
+    id: "ct-sunday",
+    name: "CT Sunday",
+    region: "Puget Sound",
+    beforeIdentifier: "ct:sept-2024:beforeSun",
+    afterIdentifier: "ct:sept-2024:afterSun",
   },
-
+  {
+    id: "st-weekday",
+    name: "Sound Transit Weekday",
+    region: "Puget Sound",
+    beforeIdentifier: "st:sept-2024:beforeWeekday",
+    afterIdentifier: "st:sept-2024:afterWeekday",
+  },
+  {
+    id: "st-saturday",
+    name: "Sound Transit Saturday",
+    region: "Puget Sound",
+    beforeIdentifier: "st:sept-2024:beforeSat",
+    afterIdentifier: "st:sept-2024:afterSat",
+  },
+  {
+    id: "st-sunday",
+    name: "Sound Transit Sunday",
+    region: "Puget Sound",
+    beforeIdentifier: "st:sept-2024:beforeSun",
+    afterIdentifier: "st:sept-2024:afterSun",
+  },
+  {
+    id: "caltrain-weekday",
+    name: "Caltrain Weekday",
+    region: "San Francisco",
+    beforeIdentifier: "caltrain:pre-calmod:weekday",
+    afterIdentifier: "caltrain:post-calmod:weekday",
+  },
+  {
+    id: "caltrain-weekend",
+    name: "Caltrain Weekend",
+    region: "San Francisco",
+    beforeIdentifier: "caltrain:pre-calmod:weekend",
+    afterIdentifier: "caltrain:post-calmod:weekend",
+  },
 ];

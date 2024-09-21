@@ -1,71 +1,72 @@
-import { Card, CardContent, CardHeader, CardTitle } from "~/components/ui/card";
+"use client";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "~/components/ui/card";
+import FeedSelector from "./feed-selector";
+import { PresetSelector } from "./preset-selector";
+import { Button } from "~/components/ui/button";
+import { type FeedAndDate } from "~/data/feeds";
+import { useState } from "react";
+import Link from "next/link";
 
-import Controls from "~/components/controls";
-import DataDisplay from "~/components/data-display";
-import { getAppState } from "~/lib/utils";
-import { Suspense } from "react";
-
-export default async function Home({
-  searchParams,
-}: {
-  searchParams: Record<string, string>;
-}) {
-  const { beforeDate, afterDate, beforeFeed, afterFeed } =
-    getAppState(searchParams);
-  const allPresent = beforeDate && afterDate && beforeFeed && afterFeed;
+export default function Home() {
+  const [firstFeed, setFirstFeed] = useState<FeedAndDate | null>(null);
+  const [secondFeed, setSecondFeed] = useState<FeedAndDate | null>(null);
   return (
-    <div className="mx-4">
-      <div className="flex flex-col gap-4 py-4">
-        <div className="grid md:grid-cols-3">
-          <Card>
-            <CardHeader>
-              {/* eslint-disable-next-line react/no-unescaped-entities */}
-              <CardTitle>What's going on here?</CardTitle>
-            </CardHeader>
-            <CardContent className="grid space-y-2">
-              <p>
-                This is a little tool to see how transit service is changing.
-                After selecting two dates, you can see the changes per route and
-                overall between the two dates.
-              </p>
-              <p>
-                Presets relating to current Seattle area service changes are
-                provided. You can also select your own dates and feeds to
-                compare.
-              </p>
-              <p>Made by <a className="underline" href="https://twitter.com/danielhep" target="_blank" rel="noreferrer">@danielhep</a>. Source code available <a className="underline" href="https://github.com/danielhep/service-changes" target="_blank" rel="noreferrer">on GitHub</a>.</p>
-            </CardContent>
-          </Card>
-          <Controls className="col-span-2" />
-        </div>
-        {!allPresent && (
-          <Card>
-            <CardHeader>
-              <CardTitle>Please select a preset or use the advanced options.</CardTitle>
-            </CardHeader>
-          </Card>
-        )}
-        {allPresent && (
-          <Card>
-            <CardHeader>
-              <CardTitle>
-                Transit Data for {new Date(beforeDate).toDateString()} to{" "}
-                {new Date(afterDate).toDateString()}
-              </CardTitle>
-            </CardHeader>
-            <CardContent>
-              <Suspense fallback={<div>Loading...</div>}>
-                <DataDisplay
-                  beforeDate={beforeDate}
-                  afterDate={afterDate}
-                  beforeFeed={beforeFeed}
-                  afterFeed={afterFeed}
-                />
-              </Suspense>
-            </CardContent>
-          </Card>
-        )}
-      </div>
+    <div className="m-auto my-4 mt-4 grid max-w-3xl grid-cols-1 space-y-4">
+      {/* <h1 className="text-4xl font-bold">
+        What is <span className="text-purple-500">What the Bus?</span>
+      </h1> */}
+      <p>
+        Compare two transit feeds or different dates in the same feed to see how
+        service has changed across a service change.
+      </p>
+      <p>
+        Use a helpful preset to quickly see current service changes for various
+        agencies, or manually select your inputs below.
+      </p>
+      <Card>
+        <CardHeader>
+          <CardTitle>Comparison Presets</CardTitle>
+          <CardDescription>
+            These presets are based on the most recent/upcoming service change
+            for the given agency. They will select service dates before and
+            after the change from the corresponding feed, and enter compare
+            mode.
+          </CardDescription>
+        </CardHeader>
+        <CardContent>
+          <PresetSelector />
+        </CardContent>
+      </Card>
+      <Card>
+        <CardHeader>
+          <CardTitle>Manual Feed Selection</CardTitle>
+          <CardDescription>
+            Select two feeds and dates to compare.
+          </CardDescription>
+        </CardHeader>
+        <CardContent className="flex flex-col space-y-4">
+          <FeedSelector onSelectionChange={setFirstFeed} />
+          <h4 className="text-sm text-muted-foreground">compare with:</h4>
+          <FeedSelector onSelectionChange={setSecondFeed} />
+          <Button
+            disabled={!firstFeed || !secondFeed}
+            aria-disabled={!firstFeed || !secondFeed}
+            asChild
+          >
+            <Link
+              href={`/${firstFeed?.identifier}/compareTo/${secondFeed?.identifier}`}
+            >
+              Compare these feeds
+            </Link>
+          </Button>
+        </CardContent>
+      </Card>
     </div>
   );
 }

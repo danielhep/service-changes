@@ -1,23 +1,19 @@
 import { loadTransitData } from "~/data/data";
 import DataTable from "./table/data-table";
-import { type Feed } from "~/data/feeds";
+import { type FeedAndDate } from "~/data/feeds";
 import DashboardRow from "./dashboard-row";
 import { processData } from "~/data/processing";
 
 export default async function DataDisplay({
-  beforeDate,
-  afterDate,
-  beforeFeed,
-  afterFeed,
+  before,
+  after,
 }: {
-  beforeDate: Date;
-  afterDate: Date;
-  beforeFeed: Feed;
-  afterFeed: Feed;
+  before: FeedAndDate;
+  after: FeedAndDate;
 }) {
   const [beforeData, afterData] = await Promise.all([
-    loadTransitData(beforeDate, beforeFeed.path),
-    loadTransitData(afterDate, afterFeed.path),
+    loadTransitData(before),
+    loadTransitData(after),
   ]);
   const combinedData = processData(beforeData, afterData);
   return (
