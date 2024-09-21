@@ -12,8 +12,8 @@ export default async function DataDisplay({
   after: FeedAndDate;
 }) {
   const [beforeData, afterData] = await Promise.all([
-    loadTransitData(before.date, before.feed.path),
-    loadTransitData(after.date, after.feed.path),
+    loadTransitData(before),
+    loadTransitData(after),
   ]);
   const combinedData = processData(beforeData, afterData);
   return (

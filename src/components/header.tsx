@@ -13,13 +13,6 @@ export default function Header({
       <Link href="/" className="text-xl font-bold text-white md:text-4xl">
         <h1>What the Bus?</h1>
       </Link>
-      {!firstFeed && <p>No feeds selected</p>}
-      {firstFeed && secondFeed && (
-        <p>
-          Compare {firstFeed.feedGroup.name}: {firstFeed.feed.id} to{" "}
-          {secondFeed.feedGroup.name}: {secondFeed.feed.id}
-        </p>
-      )}
     </header>
   );
 }

@@ -2,7 +2,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "~/components/ui/card";
 
 import DataDisplay from "~/components/data-display";
 import { Suspense } from "react";
-import { identifierToFeedAndDate } from "~/data/feeds";
+import { FeedAndDate } from "~/data/feeds";
 
 export default async function Compare({
   params,
@@ -14,12 +14,8 @@ export default async function Compare({
   if(!feedIdentifier || !feedIdentifier2) {
     return <div>No feeds selected</div>;
   }
-  const beforeFeedAndDate = identifierToFeedAndDate(
-    decodeURIComponent(feedIdentifier),
-  );
-  const afterFeedAndDate = identifierToFeedAndDate(
-    decodeURIComponent(feedIdentifier2),
-  );
+  const beforeFeedAndDate = FeedAndDate.fromIdentifier(feedIdentifier);
+  const afterFeedAndDate = FeedAndDate.fromIdentifier(feedIdentifier2);
 
   return (
     <div className="mx-4">
