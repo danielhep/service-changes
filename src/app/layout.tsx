@@ -4,8 +4,8 @@ import { GeistSans } from "geist/font/sans";
 import { type Metadata } from "next";
 
 import { ThemeProvider } from "~/components/theme-provider";
-import { identifierToFeedAndDate } from "~/data/feeds";
 import Header from "~/components/header";
+import Script from "next/script";
 
 export const metadata: Metadata = {
   title: "Service Change Analysis",
@@ -14,8 +14,13 @@ export const metadata: Metadata = {
 };
 
 const TrackingTag = () => {
-  if (process.env.NODE_ENV === 'production') {
-    return <script defer src="https://umami.danielhep.me/script.js" data-website-id="837c41b9-bd70-4b82-a29e-944e06f02d67"></script>
+  if (process.env.NODE_ENV === "production") {
+    return (
+      <Script
+        src="https://umami.danielhep.me/script.js"
+        data-website-id="837c41b9-bd70-4b82-a29e-944e06f02d67"
+      />
+    );
   }
   return null;
 };
@@ -29,10 +34,8 @@ export default function RootLayout({
       className={`${GeistSans.variable}`}
       suppressHydrationWarning
     >
-      <head>
-        <TrackingTag />
-      </head>
       <body>
+        <TrackingTag />
         <ThemeProvider
           attribute="class"
           defaultTheme="dark"
