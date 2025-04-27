@@ -32,7 +32,7 @@ export const presets: Preset[] = [
     id: "kcm-mar-2025-service-changes-weekday",
     name: "KCM Mar 2025 Service Changes Weekday",
     region: "Puget Sound",
-    beforeIdentifier: "kcm:sept-2024:afterWeekday",
+    beforeIdentifier: "kcm:mar-2025:beforeWeekday",
     afterIdentifier: "kcm:mar-2025:afterWeekday",
   },
   {
