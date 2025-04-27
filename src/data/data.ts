@@ -29,8 +29,7 @@ export async function loadTransitData(feedAndDate: FeedAndDate) {
   const routesPath = `${feedPath}/routes.txt`;
   const stopTimesPath = `${feedPath}/stop_times.txt`;
   const UTCDate = fromZonedTime(date, "UTC");
-  const data = await executeQuery(
-    sql`
+  const query = sql`
     WITH regular_services AS (
         SELECT service_id,
             start_date,
@@ -132,10 +131,9 @@ export async function loadTransitData(feedAndDate: FeedAndDate) {
       rs.end_date as end_date
     GROUP BY ALL
     ORDER BY total_duration
-    `,
-    db,
-  );
-
+    `;
+  console.log(query);
+  const data = await executeQuery(query, db);
   return data.map((val) => ({
     ...val,
     trip_count: Number(val.trip_count),

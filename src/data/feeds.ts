@@ -22,7 +22,7 @@ export class FeedAndDate {
     if (feedGroup.feeds.find((feed) => feed.id === feedId) === undefined) {
       throw new Error(`Feed not found: ${feedGroup.id}:${feedId}`);
     }
-    if (feedGroup.feeds.find((feed) => feed.dates[dateId] === undefined)) {
+    if (feedGroup.feeds.find((feed) => feed.dates[dateId] !== undefined) === undefined) {
       throw new Error(`Date not found: ${feedGroup.id}:${feedId}:${dateId}`);
     }
     this.#dateId = dateId;
@@ -112,6 +112,16 @@ export const feedGroups: FeedGroup[] = [
           afterSat: "2024-09-21",
           beforeSun: "2024-09-08",
           afterSun: "2024-09-22",
+        }),
+      },
+      {
+        id: "mar-2025",
+        path: "./gtfs/kcm_mar_25",
+        name: "Mar 2025 Service Changes",
+        dates: getDateMap({
+          afterWeekday: "2025-04-25",
+          afterSat: "2025-04-26",
+          afterSun: "2025-04-27",
         }),
       },
     ],

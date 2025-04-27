@@ -8,25 +8,32 @@ export type Preset = {
 
 export const presets: Preset[] = [
   {
-    id: "kcm-weekday",
-    name: "KCM Weekday",
+    id: "kcm-sept-2024-service-changes-weekday",
+    name: "KCM Sept 2024 Service Changes Weekday",
     region: "Puget Sound",
     beforeIdentifier: "kcm:sept-2024:beforeWeekday",
     afterIdentifier: "kcm:sept-2024:afterWeekday",
   },
   {
-    id: "kcm-saturday",
-    name: "KCM Saturday",
+    id: "kcm-sept-2024-service-changes-saturday",
+    name: "KCM Sept 2024 Service Changes Saturday",
     region: "Puget Sound",
     beforeIdentifier: "kcm:sept-2024:beforeSat",
     afterIdentifier: "kcm:sept-2024:afterSat",
   },
   {
-    id: "kcm-sunday",
-    name: "KCM Sunday",
+    id: "kcm-sept-2024-service-changes-sunday",
+    name: "KCM Sept 2024 Service Changes Sunday",
     region: "Puget Sound",
     beforeIdentifier: "kcm:sept-2024:beforeSun",
     afterIdentifier: "kcm:sept-2024:afterSun",
+  },
+  {
+    id: "kcm-mar-2025-service-changes-weekday",
+    name: "KCM Mar 2025 Service Changes Weekday",
+    region: "Puget Sound",
+    beforeIdentifier: "kcm:sept-2024:afterWeekday",
+    afterIdentifier: "kcm:mar-2025:afterWeekday",
   },
   {
     id: "ct-weekday",
