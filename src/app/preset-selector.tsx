@@ -3,45 +3,86 @@ import { buttonVariants } from "~/components/ui/button";
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "~/components/ui/tooltip";
 import { type Preset, presets } from "~/data/presets";
 import { cn } from "~/lib/utils";
+import { format } from "date-fns";
 
-export const PresetSelector = () => {
-  const presetsByRegion = presets.reduce(
+// Helper function to group presets
+const groupPresets = (presets: Preset[]) => {
+  return presets.reduce(
     (acc, preset) => {
-      const region = acc[preset.region];
-      if (!region) {
-        acc[preset.region] = [preset];
-      } else {
-        region.push(preset);
+      // Group by region
+      if (!acc[preset.region]) {
+        acc[preset.region] = {};
       }
+      const regionGroup = acc[preset.region]!;
+
+      // Group by agency within region
+      if (!regionGroup[preset.agency]) {
+        regionGroup[preset.agency] = {};
+      }
+      const agencyGroup = regionGroup[preset.agency]!;
+
+      // Group by service change date within agency (using ISO string as key)
+      const serviceChangeKey = preset.serviceChange.toISOString().split("T")[0]!; // Use YYYY-MM-DD
+      if (!agencyGroup[serviceChangeKey]) {
+        agencyGroup[serviceChangeKey] = [];
+      }
+      agencyGroup[serviceChangeKey]!.push(preset);
+
+      // Sort presets within the service change group by dayOfWeek
+      agencyGroup[serviceChangeKey]!.sort((a, b) => {
+        const order = { weekday: 1, saturday: 2, sunday: 3 };
+        return (order[a.dayOfWeek] ?? 99) - (order[b.dayOfWeek] ?? 99);
+      });
+
+
       return acc;
     },
-    {} as Record<string, Preset[]>,
+    {} as Record<string, Record<string, Record<string, Preset[]>>>,
   );
+};
+
+// Helper function to capitalize dayOfWeek
+const capitalize = (s: string) => s.charAt(0).toUpperCase() + s.slice(1);
+
+export const PresetSelector = () => {
+  const groupedPresets = groupPresets(presets);
 
   return (
     <div className="mx-auto w-full">
       <TooltipProvider>
-        {Object.keys(presetsByRegion).map((region, index) => (
-          <div key={index} className="mb-6">
-            <h2 className="mb-2 text-left text-sm">{region}:</h2>
-            <div className="grid grid-cols-3 gap-2">
-              {presetsByRegion[region]?.map((preset, presetIndex) => (
-                <Tooltip key={presetIndex}>
-                  <TooltipTrigger asChild>
-                    <Link
-                      className={cn(buttonVariants({ variant: "outline" }), 'text-wrap')}
-                      key={presetIndex}
-                      href={`/${preset.beforeIdentifier}/compareTo/${preset.afterIdentifier}`}
-                    >
-                      {preset.name}
-                    </Link>
-                  </TooltipTrigger>
-                  <TooltipContent>
-                    Comparing {preset.beforeIdentifier} to {preset.afterIdentifier}
-                  </TooltipContent>
-                </Tooltip>
-              ))}
-            </div>
+        {Object.entries(groupedPresets).map(([region, agencies]) => (
+          <div key={region} className="mb-6">
+            <h2 className="mb-4 border-b pb-1 text-left text-lg font-semibold">{region}</h2>
+            {Object.entries(agencies).map(([agency, serviceChanges]) => (
+              <div key={agency} className="mb-4 ml-2">
+                <h3 className="mb-2 text-left text-base font-medium">{agency}</h3>
+                {Object.entries(serviceChanges).map(([serviceChangeKey, dayPresets]) => (
+                  <div key={serviceChangeKey} className="mb-3 ml-4">
+                    <h4 className="mb-2 text-left text-sm text-muted-foreground">
+                      Service Change: {format(new Date(serviceChangeKey), "MMM yyyy")}
+                    </h4>
+                    <div className="grid grid-cols-3 gap-2">
+                      {dayPresets.map((preset, presetIndex) => (
+                        <Tooltip key={presetIndex}>
+                          <TooltipTrigger asChild>
+                            <Link
+                              className={cn(buttonVariants({ variant: "outline" }), 'text-wrap')}
+                              key={preset.id} // Use preset.id for a more stable key
+                              href={`/${preset.beforeIdentifier}/compareTo/${preset.afterIdentifier}`}
+                            >
+                              {capitalize(preset.dayOfWeek)}
+                            </Link>
+                          </TooltipTrigger>
+                          <TooltipContent>
+                            Compare {preset.agency} {format(preset.serviceChange, "MMM yyyy")} {capitalize(preset.dayOfWeek)} ({preset.beforeIdentifier} vs {preset.afterIdentifier})
+                          </TooltipContent>
+                        </Tooltip>
+                      ))}
+                    </div>
+                  </div>
+                ))}
+              </div>
+            ))}
           </div>
         ))}
       </TooltipProvider>
