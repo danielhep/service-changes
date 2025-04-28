@@ -9,6 +9,37 @@ import {
 import DataDisplay from "~/components/data-display";
 import { Suspense } from "react";
 import { FeedAndDate } from "~/data/feeds";
+import { Metadata, ResolvingMetadata } from "next";
+
+type Props = {
+  params: { feedIdentifier: string; feedIdentifier2: string };
+};
+
+export async function generateMetadata(
+  { params }: Props,
+  parent: ResolvingMetadata
+): Promise<Metadata> {
+  const feedIdentifier = params.feedIdentifier;
+  const feedIdentifier2 = params.feedIdentifier2;
+
+  const beforeFeedAndDate = FeedAndDate.fromIdentifier(feedIdentifier);
+  const afterFeedAndDate = FeedAndDate.fromIdentifier(feedIdentifier2);
+
+  const sameFeed = beforeFeedAndDate.hasSameFeed(afterFeedAndDate);
+
+  const title = sameFeed
+    ? `Comparison for ${beforeFeedAndDate.feedGroup.name}: ${beforeFeedAndDate.feed.name} from ${beforeFeedAndDate.date.toLocaleDateString()} to ${afterFeedAndDate.date.toLocaleDateString()}`
+    : `Comparison for ${beforeFeedAndDate.feedGroup.name}: ${beforeFeedAndDate.feed.name} on ${beforeFeedAndDate.date.toLocaleDateString()} to ${afterFeedAndDate.feedGroup.name}: ${afterFeedAndDate.feed.name} on ${afterFeedAndDate.date.toLocaleDateString()}`;
+
+  const description = sameFeed
+    ? `Comparing transit data for ${beforeFeedAndDate.feedGroup.name} ${beforeFeedAndDate.feed.name} between ${beforeFeedAndDate.date.toLocaleDateString()} and ${afterFeedAndDate.date.toLocaleDateString()}.`
+    : `Comparing transit data for ${beforeFeedAndDate.feedGroup.name} ${beforeFeedAndDate.feed.name} on ${beforeFeedAndDate.date.toLocaleDateString()} with ${afterFeedAndDate.feedGroup.name} ${afterFeedAndDate.feed.name} on ${afterFeedAndDate.date.toLocaleDateString()}.`;
+
+  return {
+    title: title,
+    description: description,
+  };
+}
 
 export default async function Compare({
   params,
