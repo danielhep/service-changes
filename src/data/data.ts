@@ -2,7 +2,7 @@
 import { fromZonedTime } from "date-fns-tz";
 import { Database } from "duckdb-async";
 import sql, { type Sql } from "@danielhep/sql-template-tag";
-import { FeedAndDate } from "./feeds";
+import type { FeedAndDate } from "./feeds";
 
 async function executeQuery(query: Sql, db: Database) {
   const preparedQuery = await db.prepare(query.duckdb);

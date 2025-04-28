@@ -1,4 +1,4 @@
-import { TransitData } from "./data";
+import type { TransitData } from "./data";
 
 export type CombinedTransitData = {
   route_id: string;

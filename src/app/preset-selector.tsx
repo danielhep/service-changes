@@ -26,10 +26,10 @@ const groupPresets = (presets: Preset[]) => {
       if (!agencyGroup[serviceChangeKey]) {
         agencyGroup[serviceChangeKey] = [];
       }
-      agencyGroup[serviceChangeKey]!.push(preset);
+      agencyGroup[serviceChangeKey].push(preset);
 
       // Sort presets within the service change group by dayOfWeek
-      agencyGroup[serviceChangeKey]!.sort((a, b) => {
+      agencyGroup[serviceChangeKey].sort((a, b) => {
         const order = { weekday: 1, saturday: 2, sunday: 3 };
         return (order[a.dayOfWeek] ?? 99) - (order[b.dayOfWeek] ?? 99);
       });

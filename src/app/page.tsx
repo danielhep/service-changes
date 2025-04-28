@@ -11,7 +11,6 @@ import { PresetSelector } from "./preset-selector";
 import { Button } from "~/components/ui/button";
 import { type FeedAndDate } from "~/data/feeds";
 import { useState } from "react";
-import Link from "next/link";
 import { useRouter } from "next/navigation";
 
 export default function Home() {

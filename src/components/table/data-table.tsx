@@ -11,14 +11,13 @@ import { ArrowRight, Info } from "lucide-react";
 import { cn } from "~/lib/utils";
 import { type CombinedTransitData } from "~/data/processing";
 import { Badge } from "../ui/badge";
-import { addHours, format, parse } from "date-fns";
+import { addHours, format } from "date-fns";
 import {
   Tooltip,
   TooltipContent,
   TooltipProvider,
   TooltipTrigger,
 } from "../ui/tooltip";
-import { Button } from "../ui/button";
 
 export const routeAddedRemovedBadge = (route: CombinedTransitData) => {
   if (!route.trip_count_before && route.trip_count_after) {

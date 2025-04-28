@@ -2,15 +2,8 @@
 import { ArrowLeft } from "lucide-react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { FeedAndDate } from "~/data/feeds";
 
-export default function Header({
-  firstFeed,
-  secondFeed,
-}: {
-  firstFeed?: FeedAndDate;
-  secondFeed?: FeedAndDate;
-}) {
+export default function Header() {
   const pathname = usePathname();
   return (
     <header className="w-full items-center justify-between bg-purple-900 px-4 shadow-sm md:flex md:h-16">
