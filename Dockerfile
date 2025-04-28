@@ -1,5 +1,5 @@
 # Use a Debian-based Node.js image
-FROM node:20-bullseye-slim AS deps
+FROM node:23-bookworm-slim AS deps
 
 # Set the working directory
 WORKDIR /app
@@ -11,7 +11,7 @@ COPY package.json pnpm-lock.yaml* ./
 RUN npm install -g pnpm && SKIP_ENV_VALIDATION=1 pnpm install --frozen-lockfile
 
 #### BUILDER STAGE ####
-FROM node:20-bullseye-slim AS builder
+FROM node:23-bookworm-slim AS builder
 WORKDIR /app
 COPY --from=deps /app/node_modules ./node_modules
 # Copy the rest of the application code
