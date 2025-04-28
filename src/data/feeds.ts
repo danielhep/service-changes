@@ -121,9 +121,9 @@ export const feedGroups: FeedGroup[] = [
         dates: getDateMap({
           beforeWeekday: "2025-03-14",
           afterWeekday: "2025-04-11",
-          beforeSat: "2025-03-14",
+          beforeSat: "2025-03-15",
           afterSat: "2025-04-12",
-          beforeSun: "2025-03-15",
+          beforeSun: "2025-03-16",
           afterSun: "2025-04-13",
         }),
       },

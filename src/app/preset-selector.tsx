@@ -4,7 +4,7 @@ import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "~/comp
 import { type Preset, presets } from "~/data/presets";
 import { cn } from "~/lib/utils";
 import { format } from "date-fns";
-
+import { formatInTimeZone } from "date-fns-tz";
 // Helper function to group presets
 const groupPresets = (presets: Preset[]) => {
   return presets.reduce(
@@ -21,8 +21,8 @@ const groupPresets = (presets: Preset[]) => {
       }
       const agencyGroup = regionGroup[preset.agency]!;
 
-      // Group by service change date within agency (using ISO string as key)
-      const serviceChangeKey = preset.serviceChange.toISOString().split("T")[0]!; // Use YYYY-MM-DD
+      // Group by service change date within agency (using local date format as key)
+      const serviceChangeKey = format(preset.serviceChange, 'yyyy-MM-dd');
       if (!agencyGroup[serviceChangeKey]) {
         agencyGroup[serviceChangeKey] = [];
       }
@@ -41,9 +41,6 @@ const groupPresets = (presets: Preset[]) => {
   );
 };
 
-// Helper function to capitalize dayOfWeek
-const capitalize = (s: string) => s.charAt(0).toUpperCase() + s.slice(1);
-
 export const PresetSelector = () => {
   const groupedPresets = groupPresets(presets);
 
@@ -56,10 +53,10 @@ export const PresetSelector = () => {
             {Object.entries(agencies).map(([agency, serviceChanges]) => (
               <div key={agency} className="mb-4 ml-2">
                 <h3 className="mb-2 text-left text-base font-medium">{agency}</h3>
-                {Object.entries(serviceChanges).map(([serviceChangeKey, dayPresets]) => (
+                {Object.entries(serviceChanges).map(([serviceChangeKey, dayPresets]) => dayPresets[0] && (
                   <div key={serviceChangeKey} className="mb-3 ml-4">
                     <h4 className="mb-2 text-left text-sm text-muted-foreground">
-                      Service Change: {format(new Date(serviceChangeKey), "MMM yyyy")}
+                      Service Change: {formatInTimeZone(dayPresets[0].serviceChange, "UTC", "MMM yyyy")}
                     </h4>
                     <div className="grid grid-cols-3 gap-2">
                       {dayPresets.map((preset, presetIndex) => (
@@ -70,11 +67,11 @@ export const PresetSelector = () => {
                               key={preset.id} // Use preset.id for a more stable key
                               href={`/${preset.beforeIdentifier}/compareTo/${preset.afterIdentifier}`}
                             >
-                              {capitalize(preset.dayOfWeek)}
+                              {preset.dayOfWeek}
                             </Link>
                           </TooltipTrigger>
                           <TooltipContent>
-                            Compare {preset.agency} {format(preset.serviceChange, "MMM yyyy")} {capitalize(preset.dayOfWeek)} ({preset.beforeIdentifier} vs {preset.afterIdentifier})
+                            Compare {preset.agency} {formatInTimeZone(preset.serviceChange, "UTC", "MMM yyyy")} {preset.dayOfWeek} ({preset.beforeIdentifier} vs {preset.afterIdentifier})
                           </TooltipContent>
                         </Tooltip>
                       ))}
