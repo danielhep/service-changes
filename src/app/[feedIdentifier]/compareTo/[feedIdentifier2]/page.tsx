@@ -12,13 +12,11 @@ import { FeedAndDate } from "~/data/feeds";
 import { Metadata, ResolvingMetadata } from "next";
 
 type Props = {
-  params: { feedIdentifier: string; feedIdentifier2: string };
+  params: Promise<{ feedIdentifier: string; feedIdentifier2: string }>;
 };
 
-export async function generateMetadata(
-  { params }: Props,
-  parent: ResolvingMetadata
-): Promise<Metadata> {
+export async function generateMetadata(props: Props, parent: ResolvingMetadata): Promise<Metadata> {
+  const params = await props.params;
   const feedIdentifier = params.feedIdentifier;
   const feedIdentifier2 = params.feedIdentifier2;
 
@@ -41,11 +39,12 @@ export async function generateMetadata(
   };
 }
 
-export default async function Compare({
-  params,
-}: {
-  params: { feedIdentifier: string; feedIdentifier2: string };
-}) {
+export default async function Compare(
+  props: {
+    params: Promise<{ feedIdentifier: string; feedIdentifier2: string }>;
+  }
+) {
+  const params = await props.params;
   const feedIdentifier = params.feedIdentifier;
   const feedIdentifier2 = params.feedIdentifier2;
   if (!feedIdentifier || !feedIdentifier2) {
