@@ -45,5 +45,8 @@ yarn-error.log*
 # idea files
 .idea
 
+# direnv
+.direnv/
+
 # gtfs
 gtfs/*
