@@ -1,0 +1,100 @@
+schema {
+  query: Query
+}
+
+"""This directive allows results to be deferred during execution"""
+directive @defer(
+  """Deferred behaviour is controlled by this argument"""
+  if: Boolean! = true
+  """A unique label that represents the fragment being deferred"""
+  label: String
+) on FRAGMENT_SPREAD | INLINE_FRAGMENT
+
+"""
+This directive disables error propagation when a non nullable field returns null for the given operation.
+"""
+directive @experimental_disableErrorPropagation on MUTATION | QUERY | SUBSCRIPTION
+
+type AggregatedStopPairTrips {
+  firstStop: Stop!
+  frequencyRegularityScore: Float
+  geoJson: String!
+  headwayCoefficientOfVariation: Float
+  headwayStandardDeviationMinutes: Float
+  maxHeadwayMinutes: Float
+  """ Frequency analysis statistics"""
+  meanHeadwayMinutes: Float
+  minHeadwayMinutes: Float
+  routes: [Route!]!
+  secondStop: Stop!
+  stopTripPairs: [StopPairTrip!]!
+  totalTripCount: Int!
+}
+
+type Query {
+  aggregatedStopPairTrips(date: String!, endTime: String!, startTime: String!): [AggregatedStopPairTrips!]!
+  allRoutes: [Route!]!
+  allStops: [Stop!]!
+  routeById(id: String!): Route
+  stopById(id: String!): Stop
+  stopPairTrips(date: String!, endTime: String!, startTime: String!): [StopPairTrip!]!
+  stopPairTripsWithShapes(date: String!, endTime: String!, startTime: String!): [StopPairTrip!]!
+  stopsNearLocation(lat: Float!, lon: Float!, radiusKm: Float): [Stop!]!
+  tripsForDate(date: String!): [Trip!]!
+  validServiceIdsForDate(date: String!): [String!]!
+}
+
+type Route {
+  agencyId: String!
+  color: String
+  description: String
+  id: String!
+  longName: String
+  shortName: String
+  textColor: String
+  type: Int!
+  url: String
+}
+
+type ShapePoint {
+  distTraveled: Float
+  lat: Float!
+  lon: Float!
+  sequence: Int!
+  shapeId: String
+}
+
+type Stop {
+  description: String
+  id: String!
+  lat: Float
+  locationType: Int
+  lon: Float
+  name: String
+  parentStation: String
+  timezone: String
+  url: String
+  wheelchairBoarding: Int
+  zoneId: String
+}
+
+type StopPairTrip {
+  firstStop: Stop!
+  geoJson: String!
+  secondStop: Stop!
+  shapePoints: [ShapePoint!]!
+  trip: Trip!
+}
+
+type Trip {
+  bikesAllowed: Int
+  blockId: String
+  directionId: Int
+  headsign: String
+  id: String!
+  routeId: String
+  serviceId: String
+  shapeId: String
+  shortName: String
+  wheelchairAccessible: Int
+}
