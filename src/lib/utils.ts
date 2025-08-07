@@ -34,7 +34,7 @@ export function getAppState(
   return {
     beforeDate: beforeDate ? setHours(beforeDate, 0) : undefined,
     afterDate: afterDate ? setHours(afterDate, 0) : undefined,
-    beforeFeed: beforeFeed ? beforeFeed : undefined,
-    afterFeed: afterFeed ? afterFeed : undefined,
+    beforeFeed: beforeFeed ?? undefined,
+    afterFeed: afterFeed ?? undefined,
   };
 }

@@ -9,13 +9,13 @@ import {
 import DataDisplay from "~/components/data-display";
 import { Suspense } from "react";
 import { FeedAndDate } from "~/data/feeds";
-import { Metadata, ResolvingMetadata } from "next";
+import { type Metadata, type ResolvingMetadata } from "next";
 
 type Props = {
   params: Promise<{ feedIdentifier: string; feedIdentifier2: string }>;
 };
 
-export async function generateMetadata(props: Props, parent: ResolvingMetadata): Promise<Metadata> {
+export async function generateMetadata(props: Props, _parent: ResolvingMetadata): Promise<Metadata> {
   const params = await props.params;
   const feedIdentifier = params.feedIdentifier;
   const feedIdentifier2 = params.feedIdentifier2;

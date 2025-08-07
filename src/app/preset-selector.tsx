@@ -10,22 +10,16 @@ const groupPresets = (presets: Preset[]) => {
   return presets.reduce(
     (acc, preset) => {
       // Group by region
-      if (!acc[preset.region]) {
-        acc[preset.region] = {};
-      }
+      acc[preset.region] ??= {};
       const regionGroup = acc[preset.region]!;
 
       // Group by agency within region
-      if (!regionGroup[preset.agency]) {
-        regionGroup[preset.agency] = {};
-      }
+      regionGroup[preset.agency] ??= {};
       const agencyGroup = regionGroup[preset.agency]!;
 
       // Group by service change date within agency (using local date format as key)
       const serviceChangeKey = format(preset.serviceChange, 'yyyy-MM-dd');
-      if (!agencyGroup[serviceChangeKey]) {
-        agencyGroup[serviceChangeKey] = [];
-      }
+      agencyGroup[serviceChangeKey] ??= [];
       agencyGroup[serviceChangeKey].push(preset);
 
       // Sort presets within the service change group by dayOfWeek
