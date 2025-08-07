@@ -80,7 +80,7 @@ export default function DataTable({ data }: { data: CombinedTransitData[] }) {
         {data.map((route) => (
           <TableRow key={route.route_id}>
             <TableCell>
-              {route.route_short_name}
+              {route.route_short_name ?? route.route_long_name}
               {routeAddedRemovedBadge(route)}
             </TableCell>
             <TableCell>

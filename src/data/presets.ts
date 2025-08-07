@@ -10,6 +10,33 @@ export type Preset = {
 
 export const presets: Preset[] = [
   {
+    id: "kcm-aug-2025-service-changes-weekday",
+    agency: "King County Metro",
+    dayOfWeek: "weekday",
+    serviceChange: new Date("2025-08-30"),
+    region: "Puget Sound",
+    beforeIdentifier: "kcm:aug-2025:beforeWeekday",
+    afterIdentifier: "kcm:aug-2025:afterWeekday",
+  },
+  {
+    id: "kcm-aug-2025-service-changes-saturday",
+    agency: "King County Metro",
+    dayOfWeek: "saturday",
+    serviceChange: new Date("2025-08-30"),
+    region: "Puget Sound",
+    beforeIdentifier: "kcm:aug-2025:beforeSat",
+    afterIdentifier: "kcm:aug-2025:afterSat",
+  },
+  {
+    id: "kcm-aug-2025-service-changes-sunday",
+    agency: "King County Metro",
+    dayOfWeek: "sunday",
+    serviceChange: new Date("2025-08-30"),
+    region: "Puget Sound",
+    beforeIdentifier: "kcm:aug-2025:beforeSun",
+    afterIdentifier: "kcm:aug-2025:afterSun",
+  },
+  {
     id: "kcm-sept-2024-service-changes-weekday",
     agency: "King County Metro",
     dayOfWeek: "weekday",

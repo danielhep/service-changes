@@ -4,6 +4,7 @@ export type CombinedTransitData = {
   route_id: string;
   trip_id: string;
   route_short_name: string;
+  route_long_name: string;
   trip_count_before?: number;
   trip_count_after?: number;
   total_duration_before?: number;
@@ -125,6 +126,7 @@ function combineTransitFeeds(
         total_duration_after: isBeforeArray ? undefined : item.total_duration,
         trip_id: item.trip_id,
         route_short_name: item.route_short_name,
+        route_long_name: item.route_long_name,
         trip_count_before: isBeforeArray ? item.trip_count : undefined,
         trip_count_after: isBeforeArray ? undefined : item.trip_count,
         avg_duration_after: isBeforeArray ? undefined : item.avg_duration,
@@ -148,10 +150,12 @@ export function processData(
   const combinedData = combineTransitFeeds(beforeData, afterData);
 
   return {
-    perRoute: combinedData.sort((a, b) =>
-      b.route_short_name.localeCompare(a.route_short_name, undefined, {
+    perRoute: combinedData.sort((a, b) => {
+      const routeNameB = b.route_short_name ?? b.route_long_name; 
+      const routeNameA = a.route_short_name ?? a.route_long_name;
+      return routeNameB.localeCompare(routeNameA, undefined, {
         numeric: true,
-      }),
+      })},
     ),
     summary: calculateSummary(combinedData),
   };

@@ -102,6 +102,19 @@ export const feedGroups: FeedGroup[] = [
     name: "King County Metro",
     feeds: [
       {
+        id: "aug-2025",
+        path: "./gtfs/kcm-aug-2025",
+        name: "August 2025 Service Change",
+        dates: getDateMap({
+          beforeWeekday: "2025-08-28",
+          afterWeekday: "2025-09-02",
+          beforeSat: "2025-08-23",
+          afterSat: "2025-09-06",
+          beforeSun: "2025-08-24",
+          afterSun: "2025-09-07",
+        }),
+      },
+      {
         id: "sept-2024",
         path: "./gtfs/kcm",
         name: "Sept 2024 Service Changes",

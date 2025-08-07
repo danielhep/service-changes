@@ -15,6 +15,7 @@ export type TransitData = {
   total_duration: number;
   trip_id: string;
   route_short_name: string;
+  route_long_name: string;
   trip_count: number;
   avg_duration: number;
 };
@@ -37,7 +38,7 @@ export async function loadTransitData(feedAndDate: FeedAndDate) {
             COLUMNS(lower(strftime(${UTCDate}, '%A'))) AS weekday
         FROM read_csv(${calendarPath},
                     dateformat = '%Y%m%d', 
-                    types={'start_date': 'DATE', 'end_date': 'DATE'})
+                    types={'start_date': 'DATE', 'end_date': 'DATE', 'service_id': 'VARCHAR'})
         WHERE weekday = 1
         AND start_date <= ${UTCDate} AND end_date >= ${UTCDate}
     ),
@@ -46,7 +47,7 @@ export async function loadTransitData(feedAndDate: FeedAndDate) {
             exception_type
         FROM read_csv(${calendarDatesPath},
                     dateformat = '%Y%m%d',
-                    types={'date': 'DATE'})
+                    types={'date': 'DATE', 'service_id': 'VARCHAR'})
         WHERE date = ${UTCDate}
     ),
     service_ids AS (
@@ -65,7 +66,7 @@ export async function loadTransitData(feedAndDate: FeedAndDate) {
         r.route_long_name,
         r.route_type
       FROM 
-          read_csv(${tripsPath}, header=True) t
+          read_csv(${tripsPath}, header=True, types={'service_id': 'VARCHAR'}) t
       JOIN 
           read_csv(${routesPath}, header=True) r ON t.route_id = r.route_id
       JOIN 
@@ -113,6 +114,7 @@ export async function loadTransitData(feedAndDate: FeedAndDate) {
           tst.first_stop_time,
           tst.last_stop_time,
           at.route_short_name,
+          at.route_long_name,
           FIRST((tst.last_stop_time - tst.first_stop_time)) AS trip_duration
       GROUP BY ALL
     )
@@ -124,6 +126,7 @@ export async function loadTransitData(feedAndDate: FeedAndDate) {
       at.route_id,
       first(tpr.trip_count) AS trip_count,
       first(route_short_name) AS route_short_name,
+      first(route_long_name) AS route_long_name,
       sum(epoch(trip_duration))/60/60 as total_duration,
       avg(epoch(trip_duration))/60/60 as avg_duration,
       rs.service_id as service_id,
