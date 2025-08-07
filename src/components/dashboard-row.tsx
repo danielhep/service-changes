@@ -23,7 +23,7 @@ export default function DashboardRow({
             {tripsDiff}
           </div>
           <p className="text-xs text-muted-foreground">
-            {summaryData.percent_change_trips}% change
+            {summaryData.trip_count_before} → {summaryData.trip_count_after} trips ({summaryData.percent_change_trips}% change)
           </p>
         </CardContent>
       </Card>
@@ -39,7 +39,7 @@ export default function DashboardRow({
             {Math.round(hoursDiff * 100) / 100}
           </div>
           <p className="text-xs text-muted-foreground">
-            {summaryData.percent_change_hours}% change
+            {Math.round(summaryData.total_duration_before * 100) / 100} → {Math.round(summaryData.total_duration_after * 100) / 100} hours ({summaryData.percent_change_hours}% change)
           </p>
         </CardContent>
       </Card>
